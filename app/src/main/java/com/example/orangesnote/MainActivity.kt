@@ -35,6 +35,7 @@ class MainActivity : AppCompatActivity() {
         addNote.setOnClickListener {
             val intent = Intent(this, NoteActivity::class.java)
             startActivity(intent)
+            finish()
         }
     }
     //添加toolbar
