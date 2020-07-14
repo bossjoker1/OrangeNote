@@ -1,31 +1,40 @@
 package com.example.orangesnote
 
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
 import androidx.recyclerview.widget.GridLayoutManager
-import com.example.orangesnote.data.NoteAdapter
+import com.example.orangesnote.data.AppDatabase
 import kotlinx.android.synthetic.main.activity_main.*
+import kotlin.concurrent.thread
 
 class MainActivity : AppCompatActivity() {
 
-    val notes = mutableListOf("第一个note", "第二个note", "第三个note", "第四个note")
 
-    val noteList = ArrayList<String>()
+    val noteList = ArrayList<Note>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         setSupportActionBar(toolbar)
-        initNote()
+        val noteDao = AppDatabase.getDatabase(this).noteDao()
+        noteList.clear()
+        noteList.add(Note("第一个示例", "内容"))
+        thread {
+            noteDao.deleteNoteByTitle("第二行")
+            for (note in noteDao.loadAllNotes())
+                noteList.add(note)
+        }
         val layoutManager = GridLayoutManager(this, 1)
         recyclerView.layoutManager = layoutManager
         val adpter = NoteAdapter(this, noteList)
         recyclerView.adapter = adpter
         //悬浮按钮编辑创建
         addNote.setOnClickListener {
-
+            val intent = Intent(this, NoteActivity::class.java)
+            startActivity(intent)
         }
     }
     //添加toolbar
@@ -38,11 +47,4 @@ class MainActivity : AppCompatActivity() {
         return super.onOptionsItemSelected(item)
     }
 
-    private  fun initNote(){
-        noteList.clear()
-        repeat(10){
-            val index = (0 until notes.size).random()
-            noteList.add(notes[index])
-        }
-    }
 }

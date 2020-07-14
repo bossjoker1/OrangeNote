@@ -1,4 +1,4 @@
-package com.example.orangesnote.data
+package com.example.orangesnote
 
 import android.content.Context
 import android.view.LayoutInflater
@@ -6,14 +6,14 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
-import com.example.orangesnote.Note
-import com.example.orangesnote.R
+
 //配置note适配器
-class NoteAdapter(val context: Context, val noteList: List<String>):
+class NoteAdapter(val context: Context, val noteList: List<Note>):
          RecyclerView.Adapter<NoteAdapter.ViewHolder>(){
 
     inner class ViewHolder(view:View):RecyclerView.ViewHolder(view){
         val noteTitle:TextView = view.findViewById(R.id.noteTitle)
+        val noteContent:TextView = view.findViewById(R.id.noteContent)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -24,7 +24,8 @@ class NoteAdapter(val context: Context, val noteList: List<String>):
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val note = noteList[position]
-        holder.noteTitle.text = note
+        holder.noteTitle.text = note.title
+        holder.noteContent.text = note.content
     }
 
     override fun getItemCount() = noteList.size
