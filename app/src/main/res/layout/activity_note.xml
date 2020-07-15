@@ -27,7 +27,8 @@
             android:layout_weight="5"
             android:layout_gravity="center_horizontal"
             android:textStyle="bold"
-            android:textSize="27sp"/>
+            android:textSize="27sp"
+            android:hint=""/>
     </LinearLayout>
 
     <LinearLayout
@@ -60,6 +61,7 @@
             android:maxLines="10"
             android:scrollbars="vertical"
             android:background="@android:drawable/edit_text"
+            android:hint=""
         >
     </EditText>
     </LinearLayout>

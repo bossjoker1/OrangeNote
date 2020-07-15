@@ -6,7 +6,7 @@ import androidx.room.PrimaryKey
 //数据类
 
 @Entity
-data class Note (val title:String, val content: String){
+data class Note (var title:String, var content: String){
 
     @PrimaryKey(autoGenerate = true)
     var id:Long = 0
