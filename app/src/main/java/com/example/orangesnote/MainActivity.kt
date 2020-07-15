@@ -23,7 +23,6 @@ class MainActivity : AppCompatActivity() {
         noteList.clear()
         noteList.add(Note("第一个示例", "内容"))
         thread {
-            noteDao.deleteNoteByTitle("第二行")
             for (note in noteDao.loadAllNotes())
                 noteList.add(note)
         }
@@ -35,7 +34,6 @@ class MainActivity : AppCompatActivity() {
         addNote.setOnClickListener {
             val intent = Intent(this, NoteActivity::class.java)
             startActivity(intent)
-            finish()
         }
     }
     //添加toolbar

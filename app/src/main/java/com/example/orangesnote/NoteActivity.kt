@@ -12,9 +12,9 @@ class NoteActivity : AppCompatActivity() {
         setContentView(R.layout.activity_note)
         val noteDao = AppDatabase.getDatabase(this).noteDao()
         submit.setOnClickListener {
-            if (titleAdd.text != null){
+            if (titleAdd.text.toString()!= "") {
                 thread {
-                    noteDao.insertNote(Note(titleAdd.text.toString(), contentAdd.text.toString() ))
+                    noteDao.insertNote(Note(titleAdd.text.toString(), contentAdd.text.toString()))
                 }
                 val intent = Intent(this, MainActivity::class.java)
                 startActivity(intent)
