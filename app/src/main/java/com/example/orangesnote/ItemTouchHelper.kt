@@ -7,21 +7,14 @@ import androidx.recyclerview.widget.RecyclerView
 
  class RecycleItemTouchHelper(private val helperCallback: ItemTouchHelperCallback) :
     ItemTouchHelper.Callback() {
-     private val adapter: NoteAdapter? = null
-    companion object {
-        private const val TAG = "RecycleItemTouchHelper"
-    }
 
     //设置滑动类型标记
     override fun getMovementFlags(
         recyclerView: RecyclerView,
         viewHolder: RecyclerView.ViewHolder
     ): Int {
-        Log.e(TAG, "getMovementFlags: ")
-        return makeMovementFlags(
-            ItemTouchHelper.UP or ItemTouchHelper.DOWN,
-            ItemTouchHelper.END
-        )
+        return makeMovementFlags(ItemTouchHelper.UP or ItemTouchHelper.DOWN,
+            ItemTouchHelper.END or ItemTouchHelper.START )
     }
 
 
@@ -40,14 +33,12 @@ import androidx.recyclerview.widget.RecyclerView
         viewHolder: RecyclerView.ViewHolder,
         target: RecyclerView.ViewHolder
     ): Boolean {
-        Log.e(TAG, "onMove: ")
         helperCallback.onMove(viewHolder.adapterPosition, target.adapterPosition)
         return true
     }
 
     //滑动
     override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int): Unit {
-        Log.e(TAG, "onSwiped: ")
         helperCallback.onItemDelete(viewHolder.adapterPosition)
     }
 

@@ -26,17 +26,17 @@ class MainActivity : AppCompatActivity() {
         noteList.clear()
        // noteList.add(Note("第一个示例", "内容"))
         thread {
-            noteDao.deleteNoteByTitle("4")
             for (note in noteDao.loadAllNotes())
                 noteList.add(note)
             for (note in noteDao.loadAllNotes()){
-                Log.d("fuck1", note.title+" , "+note.content)
+                Log.d("fuck1", note.title+" , "+note.content +", "+note.id)
             }
         }
         val layoutManager = GridLayoutManager(this, 1)
         recyclerView.layoutManager = layoutManager
         val adpter = NoteAdapter(this, noteList)
         recyclerView.adapter = adpter
+        //实现滑动与拖拽
         val callback: ItemTouchHelper.Callback = RecycleItemTouchHelper(adpter)
         val itemTouchHelper = ItemTouchHelper(callback)
         itemTouchHelper.attachToRecyclerView(recyclerView)
@@ -62,7 +62,6 @@ class MainActivity : AppCompatActivity() {
         super.onRestart()
         val noteDao = AppDatabase.getDatabase(this).noteDao()
         noteList.clear()
-        //noteList.add(Note("第一个示例", "内容"))
         thread {
             for (note in noteDao.loadAllNotes())
                 noteList.add(note)

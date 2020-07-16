@@ -29,14 +29,12 @@ class NoteAdapter(val context: Context, val noteList: ArrayList<Note>):
         holder.itemView.setOnClickListener {
             val position = holder.adapterPosition
             val note  = noteList[position]
-            val intent = Intent(parent.context, NoteActivity::class.java).apply {
+            val intent = Intent(parent.context, ReadActivity::class.java).apply {
                 putExtra("note_title", note.title)
                 putExtra("note_content", note.content)
                 putExtra("note_Id",note.id.toString())
         }
             context.startActivity(intent)
-            Toast.makeText(parent.context, " you are going to edit 《${note.title}》.",
-            Toast.LENGTH_SHORT).show()
         }
         return holder
     }
@@ -48,7 +46,7 @@ class NoteAdapter(val context: Context, val noteList: ArrayList<Note>):
     }
 
     override fun getItemCount() = noteList.size
-//卡了好久啊
+//卡了好久啊，拖动删除
     override fun onItemDelete(positon: Int) {
         val noteDao = AppDatabase.getDatabase(context).noteDao()
         val delnote = noteList[positon]
@@ -60,8 +58,48 @@ class NoteAdapter(val context: Context, val noteList: ArrayList<Note>):
         Log.d("fuck5", positon.toString()+noteList.size)
     }
 
+    //拖拽排序
     override fun onMove(fromPosition: Int, toPosition: Int) {
-        Collections.swap(noteList, fromPosition, toPosition) //交换数据
+        /**交换数据,感觉实现的好复杂啊，开始想的交换id，太憨憨了，然后直接等号赋值交换，note对象没有这种操作
+        为啥不报错，最后就采用这种了。。*/
+       // Log.d("fuck3", fromPosition.toString()+"->"+toPosition)
+        val noteDao = AppDatabase.getDatabase(context).noteDao()
+            if (fromPosition < toPosition) {
+                for (i in fromPosition until toPosition) {
+                    Collections.swap(noteList, i, i + 1)
+                    Log.d("fuck2", fromPosition.toString()+"->"+toPosition)
+                    val temptitle = noteList[i].title
+                    val tempcontent = noteList[i].content
+                    noteList[i].title = noteList[i + 1].title
+                    noteList[i].content = noteList[i + 1].content
+                    noteList[i + 1].title = temptitle
+                    noteList[i + 1].content = tempcontent
+                    thread {
+                        noteDao.updateNote(noteList[i])
+                        noteDao.updateNote(noteList[i + 1])
+                        Log.d("fuck3", noteList[i].title + ", " + noteList[i].content+", "
+                        +i)
+                        for (i in noteList)
+                            Log.d("fuck6", i.title)
+                    }
+
+                }
+            } else {
+                for (i in fromPosition downTo toPosition + 1) {
+                    val temptitle = noteList[i].title
+                    val tempcontent = noteList[i].content
+                    noteList[i].title = noteList[i - 1].title
+                    noteList[i].content = noteList[i - 1].content
+                    noteList[i - 1].title = temptitle
+                    noteList[i - 1].content = tempcontent
+                    thread {
+                        noteDao.updateNote(noteList[i])
+                        noteDao.updateNote(noteList[i - 1])
+                    }
+                    Collections.swap(noteList, i, i - 1)
+                }
+            }
+
         notifyItemMoved(fromPosition, toPosition)
     }
 
