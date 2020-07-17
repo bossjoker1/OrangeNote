@@ -4,6 +4,40 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
+    <LinearLayout
+        android:id="@+id/setTime"
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="60dp">
+        <TextView
+            android:layout_width="90dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:textSize="18sp"
+            android:text="设置时间:"/>
+        <EditText
+            android:id="@+id/setHour"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:layout_gravity="center_vertical"
+            android:hint="时"/>
+        <TextView
+            android:layout_width="10dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:textSize="18sp"
+            android:text=" : "/>
+        <EditText
+            android:id="@+id/setMin"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:layout_gravity="center_vertical"
+            android:hint="分"/>
+
+    </LinearLayout>
+
     <ImageView
         android:id="@+id/bgImg"
         android:layout_width="match_parent"
@@ -13,6 +47,7 @@
 
 
     <LinearLayout
+        android:layout_below="@+id/setTime"
         android:layout_marginTop="8dp"
         android:id="@+id/itemTitle"
         android:orientation="horizontal"
@@ -75,29 +110,23 @@
     </LinearLayout>
 
     <Button
-        android:id="@+id/submit"
+        android:id="@+id/setBtn"
         android:layout_below="@+id/itemContent"
         android:layout_width="100dp"
         android:layout_height="wrap_content"
         android:layout_marginLeft="150dp"
         android:layout_gravity="center_horizontal"
         android:layout_marginTop="5dp"
-        android:text="Submit"/>
-    <Button
-        android:id="@+id/setBtn"
-        android:gravity="center"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/submit"
         android:text="设置闹钟"/>
 
     <Button
-        android:id="@+id/cancelBtn"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:id="@+id/submit"
         android:layout_below="@+id/setBtn"
-        android:text="取消闹钟"
-        android:visibility="gone"/>
-
+        android:layout_width="100dp"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="150dp"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="5dp"
+        android:text="Submit"/>
 
 </RelativeLayout>
