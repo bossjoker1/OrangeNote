@@ -15,13 +15,36 @@ class NoteActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_note)
+        val title = intent.getStringExtra("note_title") ?: ""
+        val content = intent.getStringExtra("note_content") ?: ""
+        val id = intent.getStringExtra("note_Id") ?: ""
+        Log.d("fuck", title)
+        Log.d("fuck", content)
+        Log.d("fuck", id)
+        titleAdd.setText(title)
+        contentAdd.setText(content)
         val noteDao = AppDatabase.getDatabase(this).noteDao()
         submit.setOnClickListener {
             if (titleAdd.text.toString() != "") {
-                val intent = Intent(this, MainActivity::class.java)
-                thread {
-                    noteDao.insertNote(Note(titleAdd.text.toString(), contentAdd.text.toString()))
+                if (title!=""){
+                    thread {
+                        val tempNote = noteDao.loadById(id.toLong())
+                        tempNote.title = titleAdd.text.toString()
+                        tempNote.content = contentAdd.text.toString()
+                        noteDao.updateNote(tempNote)
+                        Log.d("fuck0", tempNote.title+", "+tempNote.content)
+                    }
+                }else {
+                    thread {
+                        noteDao.insertNote(
+                            Note(
+                                titleAdd.text.toString(),
+                                contentAdd.text.toString()
+                            )
+                        )
+                    }
                 }
+                val intent = Intent(this, MainActivity::class.java)
                 startActivity(intent)
                 finish()
             }

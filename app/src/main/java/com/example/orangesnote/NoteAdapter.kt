@@ -29,11 +29,12 @@ class NoteAdapter(val context: Context, val noteList: ArrayList<Note>):
         holder.itemView.setOnClickListener {
             val position = holder.adapterPosition
             val note  = noteList[position]
-            val intent = Intent(parent.context, ReadActivity::class.java).apply {
+            val intent = Intent(parent.context, NoteActivity::class.java).apply {
                 putExtra("note_title", note.title)
                 putExtra("note_content", note.content)
                 putExtra("note_Id",note.id.toString())
         }
+            Toast.makeText(context,"you are editing ${note.title}.", Toast.LENGTH_SHORT).show()
             context.startActivity(intent)
         }
         return holder
