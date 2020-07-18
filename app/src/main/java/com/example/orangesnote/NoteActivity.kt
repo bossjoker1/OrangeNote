@@ -61,18 +61,21 @@ class NoteActivity : AppCompatActivity(){
                 finish()
             }
         }
-
+        //接收广播
         val manager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
         val channel = NotificationChannel("time", "Time", NotificationManager.IMPORTANCE_DEFAULT)
         manager.createNotificationChannel(channel)
 
         setBtn.setOnClickListener { view ->
             val c = Calendar.getInstance()
+            //调整为中国时区，不然有8小时差比较麻烦
             val tz = TimeZone.getTimeZone("Asia/Shanghai")
             c.setTimeZone(tz)
+            //获取当前时间
             val hour = c?.get(Calendar.HOUR)
             val minute = c?.get(Calendar.MINUTE);
             val second = c?.get(Calendar.SECOND)
+            //计时发送通知
             val mIntent = Intent(this, MyReceiver::class.java)
             val mPendingIntent =
                 PendingIntent.getBroadcast(this, 0, mIntent, PendingIntent.FLAG_UPDATE_CURRENT)
