@@ -12,7 +12,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.orangesnote.data.AppDatabase
 import java.util.*
 import kotlin.concurrent.thread
-
+//绿色注释为失败案例
 //配置note适配器
 class NoteAdapter(val context: Context, val noteList: ArrayList<Note>):
          RecyclerView.Adapter<NoteAdapter.ViewHolder>(), RecycleItemTouchHelper.ItemTouchHelperCallback{
@@ -64,44 +64,54 @@ class NoteAdapter(val context: Context, val noteList: ArrayList<Note>):
         /**交换数据,感觉实现的好复杂啊，开始想的交换id，太憨憨了，然后直接等号赋值交换，note对象没有这种操作
         为啥不报错，最后就采用这种了。。*/
        // Log.d("fuck3", fromPosition.toString()+"->"+toPosition)
+
         val noteDao = AppDatabase.getDatabase(context).noteDao()
             if (fromPosition < toPosition) {
                 for (i in fromPosition until toPosition) {
                     Collections.swap(noteList, i, i + 1)
-                    Log.d("fuck2", fromPosition.toString()+"->"+toPosition)
+                    for (i in noteList){
+                        Log.d("title", i.title)
+                    }
+                    Log.d("tag2", fromPosition.toString()+"->"+toPosition)
+                   /**
                     val temptitle = noteList[i].title
                     val tempcontent = noteList[i].content
                     noteList[i].title = noteList[i + 1].title
                     noteList[i].content = noteList[i + 1].content
                     noteList[i + 1].title = temptitle
                     noteList[i + 1].content = tempcontent
-                    thread {
-                        noteDao.updateNote(noteList[i])
-                        noteDao.updateNote(noteList[i + 1])
-                        Log.d("fuck3", noteList[i].title + ", " + noteList[i].content+", "
-                        +i)
-                        for (i in noteList)
-                            Log.d("fuck6", i.title)
-                    }
+                    */
 
                 }
             } else {
                 for (i in fromPosition downTo toPosition + 1) {
+                    /**
                     val temptitle = noteList[i].title
                     val tempcontent = noteList[i].content
                     noteList[i].title = noteList[i - 1].title
                     noteList[i].content = noteList[i - 1].content
                     noteList[i - 1].title = temptitle
                     noteList[i - 1].content = tempcontent
+                    */
+                    /**
                     thread {
                         noteDao.updateNote(noteList[i])
                         noteDao.updateNote(noteList[i - 1])
-                    }
+                    }*/
                     Collections.swap(noteList, i, i - 1)
                 }
             }
+        thread {
+            var templist = noteDao.loadAllNotes().toMutableList()
+            for (i in 0 until  templist.size){
+                templist[i].title = noteList[i].title
+                templist[i].content = noteList[i].content
+                noteDao.updateNote(templist[i])
+            }
+        }
 
         notifyItemMoved(fromPosition, toPosition)
+
     }
 
 }

@@ -57,6 +57,20 @@ class MainActivity : AppCompatActivity() {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return super.onOptionsItemSelected(item)
     }
+
+    override fun onPause() {
+        super.onPause()
+        val noteDao = AppDatabase.getDatabase(this).noteDao()
+        /**
+        thread {
+        for (i in noteList){
+        Log.d("fuck7", i.title)
+        noteDao.updateNote(i)
+        }
+        }
+        */
+    }
+
     //不知道咋刷新，只能在onRestart上重新显示，估计效率很低
     override fun onRestart() {
         super.onRestart()

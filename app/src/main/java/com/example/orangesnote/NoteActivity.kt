@@ -9,6 +9,7 @@ import android.content.Intent
 import android.os.Build
 import android.os.Bundle
 import android.util.Log
+import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import com.example.orangesnote.data.AppDatabase
@@ -82,16 +83,27 @@ class NoteActivity : AppCompatActivity(){
             am = this
                 .getSystemService(Context.ALARM_SERVICE) as AlarmManager
             if (hour != null && minute != null) {
-                var interval = abs(
-                    3600 * (setHour.text.toString().toInt() - hour)
-                            + 60 * (setMin.text.toString().toInt() - minute)
-                ).toLong()
-                Log.d("fuck11", (setMin.text.toString().toInt() - minute).toString()+","+setMin.text.toString())
-                am!!.setExactAndAllowWhileIdle(
-                    AlarmManager.RTC_WAKEUP, System.currentTimeMillis() + interval*1000,
-                    mPendingIntent
-                )
-                Log.d("fuck8", hour.toString() + "," + minute.toString() + "," + interval.toString())
+                if (setHour.text.toString()==""||setMin.text.toString()==""){
+                    Toast.makeText(this, "设置闹钟前请输入正确格式",Toast.LENGTH_SHORT).show()
+                }else {
+                    var interval = abs(
+                        3600 * (setHour.text.toString().toInt() - hour)
+                                + 60 * (setMin.text.toString().toInt() - minute)
+                    ).toLong()
+                    Log.d(
+                        "fuck11",
+                        (setMin.text.toString()
+                            .toInt() - minute).toString() + "," + setMin.text.toString()
+                    )
+                    am!!.setExactAndAllowWhileIdle(
+                        AlarmManager.RTC_WAKEUP, System.currentTimeMillis() + interval * 1000,
+                        mPendingIntent
+                    )
+                    Log.d(
+                        "fuck8",
+                        hour.toString() + "," + minute.toString() + "," + interval.toString()
+                    )
+                }
             }
             /**本来想做个通知的,但是通知好像不如广播来的方便
              * setBtn.setOnClickListener {
