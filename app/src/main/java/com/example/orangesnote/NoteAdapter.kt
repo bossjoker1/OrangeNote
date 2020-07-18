@@ -36,6 +36,7 @@ class NoteAdapter(val context: Context, val noteList: ArrayList<Note>):
         }
             Toast.makeText(context,"you are editing ${note.title}.", Toast.LENGTH_SHORT).show()
             context.startActivity(intent)
+
         }
         return holder
     }
@@ -101,6 +102,7 @@ class NoteAdapter(val context: Context, val noteList: ArrayList<Note>):
                     Collections.swap(noteList, i, i - 1)
                 }
             }
+        //排序后的数据更新
         thread {
             var templist = noteDao.loadAllNotes().toMutableList()
             for (i in 0 until  templist.size){

@@ -15,12 +15,18 @@ import kotlin.concurrent.thread
 
 class MainActivity : AppCompatActivity() {
 
+    //定义全局变量，实现在另一个Activity中删除MainActivity
+    companion object{
+        var instance: MainActivity? = null
+    }
 
     val noteList = ArrayList<Note>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+        instance = this
+        Log.d("MainActivity1", "onCreate")
         setSupportActionBar(toolbar)
         val noteDao = AppDatabase.getDatabase(this).noteDao()
         noteList.clear()
@@ -53,37 +59,35 @@ class MainActivity : AppCompatActivity() {
         menuInflater.inflate(R.menu.toolbar, menu)
         return true
     }
-    //还没写功能
+    //还没写功能,可添加音乐啥的，应该跟天气预报的引入差不多
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return super.onOptionsItemSelected(item)
     }
 
     override fun onPause() {
         super.onPause()
-        val noteDao = AppDatabase.getDatabase(this).noteDao()
-        /**
-        thread {
-        for (i in noteList){
-        Log.d("fuck7", i.title)
-        noteDao.updateNote(i)
-        }
-        }
-        */
+        Log.d("MainActivity1", "onPau")
     }
 
-    //不知道咋刷新，只能在onRestart上重新显示，估计效率很低
+    override fun onStop() {
+        super.onStop()
+        Log.d("MainActivity1", "onStop")
+    }
+
+    override fun onResume() {
+        super.onResume()
+        Log.d("MainActivity1", "onResume")
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        Log.d("MainActivity1", "onDestroy")
+    }
+
+    //不知道咋刷新，只能在onRestart上重新显示，估计效率很低,原来没啥用，还造成了bug，心累
     override fun onRestart() {
         super.onRestart()
-        val noteDao = AppDatabase.getDatabase(this).noteDao()
-        noteList.clear()
-        thread {
-            for (note in noteDao.loadAllNotes())
-                noteList.add(note)
-        }
-        val layoutManager = GridLayoutManager(this, 1)
-        recyclerView.layoutManager = layoutManager
-        val adpter = NoteAdapter(this, noteList)
-        recyclerView.adapter = adpter
-    }
+        Log.d("MainActivity1", "onRestart")
+       }
 
 }

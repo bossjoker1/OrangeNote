@@ -17,6 +17,7 @@ import kotlinx.android.synthetic.main.activity_note.*
 import java.util.*
 import kotlin.concurrent.thread
 import kotlin.math.abs
+import com.example.orangesnote.MainActivity
 
 
 class NoteActivity : AppCompatActivity(){
@@ -57,6 +58,7 @@ class NoteActivity : AppCompatActivity(){
                         )
                     }
                 }
+                MainActivity.instance?.finish();
                 val intent = Intent(this, MainActivity::class.java)
                 startActivity(intent)
                 finish()
@@ -83,7 +85,8 @@ class NoteActivity : AppCompatActivity(){
             am = this
                 .getSystemService(Context.ALARM_SERVICE) as AlarmManager
             if (hour != null && minute != null) {
-                if (setHour.text.toString()==""||setMin.text.toString()==""){
+                if (setHour.text.toString()==""||setMin.text.toString()==""||setHour.text.toString().toInt()>12
+                    ||setMin.text.toString().toInt()>60){
                     Toast.makeText(this, "设置闹钟前请输入正确格式",Toast.LENGTH_SHORT).show()
                 }else {
                     var interval = abs(
