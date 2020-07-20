@@ -73,41 +73,31 @@ class NoteActivity : AppCompatActivity(){
             val c = Calendar.getInstance()
             //调整为中国时区，不然有8小时差比较麻烦
             val tz = TimeZone.getTimeZone("Asia/Shanghai")
-            c.setTimeZone(tz)
+            c.timeZone = tz
             //获取当前时间
-            val hour = c?.get(Calendar.HOUR)
-            val minute = c?.get(Calendar.MINUTE);
-            val second = c?.get(Calendar.SECOND)
+            c.set(Calendar.HOUR_OF_DAY, setHour.text.toString().toInt());//小时
+            c.set(
+                Calendar.MINUTE, setMin.text.toString()
+                    .toInt()
+            );//分钟
+            c.set(Calendar.SECOND, 0);//秒
             //计时发送通知
             val mIntent = Intent(this, MyReceiver::class.java)
             val mPendingIntent =
                 PendingIntent.getBroadcast(this, 0, mIntent, PendingIntent.FLAG_UPDATE_CURRENT)
             am = this
                 .getSystemService(Context.ALARM_SERVICE) as AlarmManager
-            if (hour != null && minute != null) {
-                if (setHour.text.toString()==""||setMin.text.toString()==""||setHour.text.toString().toInt()>12
-                    ||setMin.text.toString().toInt()>60){
-                    Toast.makeText(this, "设置闹钟前请输入正确格式",Toast.LENGTH_SHORT).show()
-                }else {
-                    var interval = abs(
-                        3600 * (setHour.text.toString().toInt() - hour)
-                                + 60 * (setMin.text.toString().toInt() - minute)
-                    ).toLong()
-                    Log.d(
-                        "fuck11",
-                        (setMin.text.toString()
-                            .toInt() - minute).toString() + "," + setMin.text.toString()
-                    )
-                    am!!.setExactAndAllowWhileIdle(
-                        AlarmManager.RTC_WAKEUP, System.currentTimeMillis() + interval * 1000,
-                        mPendingIntent
-                    )
-                    Log.d(
-                        "fuck8",
-                        hour.toString() + "," + minute.toString() + "," + interval.toString()
-                    )
-                }
+            if (setHour.text.toString().toInt() > 24 || setMin.text.toString().toInt() > 60) {
+                Toast.makeText(this, "请输入正确的时间格式！", Toast.LENGTH_SHORT).show()
+            } else {
+                Log.d("fuck10", c.timeInMillis.toString())
+                am!!.setExactAndAllowWhileIdle(
+                    AlarmManager.RTC_WAKEUP, c.timeInMillis,
+                    mPendingIntent
+                )
+                Toast.makeText(this, "设置成功", Toast.LENGTH_SHORT).show()
             }
+        }
             /**本来想做个通知的,但是通知好像不如广播来的方便
              * setBtn.setOnClickListener {
             val notification = NotificationCompat.Builder(this, "time")
@@ -124,7 +114,7 @@ class NoteActivity : AppCompatActivity(){
             }
             }*/
         }
-    }
+
    //监听并防止用户按back键直接返回到桌面，之前那个方法不行
     override fun onBackPressed() {
         if(titleAdd.text.toString() == ""){
