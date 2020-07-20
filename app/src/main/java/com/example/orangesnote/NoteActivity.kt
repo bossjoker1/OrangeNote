@@ -75,19 +75,21 @@ class NoteActivity : AppCompatActivity(){
             val tz = TimeZone.getTimeZone("Asia/Shanghai")
             c.timeZone = tz
             //获取当前时间
-            c.set(Calendar.HOUR_OF_DAY, setHour.text.toString().toInt());//小时
-            c.set(
-                Calendar.MINUTE, setMin.text.toString()
-                    .toInt()
-            );//分钟
-            c.set(Calendar.SECOND, 0);//秒
+            if (setHour.text.toString()!=""&&setMin.text.toString()!="") {
+                c.set(Calendar.HOUR_OF_DAY, setHour.text.toString().toInt());//小时
+                c.set(
+                    Calendar.MINUTE, setMin.text.toString().toInt()
+                );//分钟
+                c.set(Calendar.SECOND, 0);//秒
+            }
             //计时发送通知
             val mIntent = Intent(this, MyReceiver::class.java)
             val mPendingIntent =
                 PendingIntent.getBroadcast(this, 0, mIntent, PendingIntent.FLAG_UPDATE_CURRENT)
             am = this
                 .getSystemService(Context.ALARM_SERVICE) as AlarmManager
-            if (setHour.text.toString().toInt() > 24 || setMin.text.toString().toInt() > 60) {
+            if (setHour.text.toString()==""||setMin.text.toString()==""||
+                setHour.text.toString().toInt() > 24 || setMin.text.toString().toInt() > 60) {
                 Toast.makeText(this, "请输入正确的时间格式！", Toast.LENGTH_SHORT).show()
             } else {
                 Log.d("fuck10", c.timeInMillis.toString())

@@ -1,10 +1,12 @@
 package com.example.orangesnote
 
 import android.content.Intent
+import android.media.MediaPlayer
 import android.os.Bundle
 import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.ItemTouchHelper
@@ -22,9 +24,12 @@ class MainActivity : AppCompatActivity() {
 
     val noteList = ArrayList<Note>()
 
+    private val mediaPlayer = MediaPlayer()
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+        initMediaPlayer()
         instance = this
         Log.d("MainActivity1", "onCreate")
         setSupportActionBar(toolbar)
@@ -61,7 +66,17 @@ class MainActivity : AppCompatActivity() {
     }
     //还没写功能,可添加音乐啥的，应该跟天气预报的引入差不多
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        return super.onOptionsItemSelected(item)
+        when(item.itemId){
+            R.id.backup -> if (!mediaPlayer.isPlaying){
+                    mediaPlayer.start()
+                }
+            R.id.delete -> if (mediaPlayer.isPlaying){
+                mediaPlayer.pause()
+                mediaPlayer.reset()
+                initMediaPlayer()
+            }
+        }
+        return true
     }
 
     override fun onPause() {
@@ -82,6 +97,8 @@ class MainActivity : AppCompatActivity() {
     override fun onDestroy() {
         super.onDestroy()
         Log.d("MainActivity1", "onDestroy")
+        mediaPlayer.stop()
+        mediaPlayer.release()
     }
 
     //不知道咋刷新，只能在onRestart上重新显示，估计效率很低,原来没啥用，还造成了bug，心累
@@ -89,5 +106,12 @@ class MainActivity : AppCompatActivity() {
         super.onRestart()
         Log.d("MainActivity1", "onRestart")
        }
+
+    private fun initMediaPlayer(){
+        val assetManager = assets
+        val fd = assetManager.openFd("Versions.mp3")
+        mediaPlayer.setDataSource(fd.fileDescriptor, fd.startOffset, fd.length)
+        mediaPlayer.prepare()
+    }
 
 }
