@@ -84,10 +84,10 @@ class NoteActivity : AppCompatActivity(){
             }
             //计时发送通知
             val mIntent = Intent(this, MyReceiver::class.java)
+            mIntent.action = "NOTIFICATION";
             val mPendingIntent =
                 PendingIntent.getBroadcast(this, 0, mIntent, PendingIntent.FLAG_UPDATE_CURRENT)
-            am = this
-                .getSystemService(Context.ALARM_SERVICE) as AlarmManager
+            am = this.getSystemService(Context.ALARM_SERVICE) as AlarmManager
             if (setHour.text.toString()==""||setMin.text.toString()==""||
                 setHour.text.toString().toInt() > 24 || setMin.text.toString().toInt() > 60) {
                 Toast.makeText(this, "请输入正确的时间格式！", Toast.LENGTH_SHORT).show()
@@ -100,21 +100,7 @@ class NoteActivity : AppCompatActivity(){
                 Toast.makeText(this, "设置成功", Toast.LENGTH_SHORT).show()
             }
         }
-            /**本来想做个通知的,但是通知好像不如广播来的方便
-             * setBtn.setOnClickListener {
-            val notification = NotificationCompat.Builder(this, "time")
-            .setContentTitle("Time is up!")
-            .setContentText("Task: ${titleAdd.text.toString()} ")
-            .setSmallIcon(R.drawable.small_icon)
-            .setLargeIcon(BitmapFactory.decodeResource(resources,
-            R.drawable.large_icon))
-            .build()
-            runBlocking {
-            launch {
-            manager.notify(1, notification)
-            }
-            }
-            }*/
+        
         }
 
    //监听并防止用户按back键直接返回到桌面，之前那个方法不行

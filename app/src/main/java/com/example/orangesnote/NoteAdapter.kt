@@ -74,31 +74,9 @@ class NoteAdapter(val context: Context, val noteList: ArrayList<Note>):
                         Log.d("title", i.title)
                     }
                     Log.d("tag2", fromPosition.toString()+"->"+toPosition)
-                   /**
-                    val temptitle = noteList[i].title
-                    val tempcontent = noteList[i].content
-                    noteList[i].title = noteList[i + 1].title
-                    noteList[i].content = noteList[i + 1].content
-                    noteList[i + 1].title = temptitle
-                    noteList[i + 1].content = tempcontent
-                    */
-
                 }
             } else {
                 for (i in fromPosition downTo toPosition + 1) {
-                    /**
-                    val temptitle = noteList[i].title
-                    val tempcontent = noteList[i].content
-                    noteList[i].title = noteList[i - 1].title
-                    noteList[i].content = noteList[i - 1].content
-                    noteList[i - 1].title = temptitle
-                    noteList[i - 1].content = tempcontent
-                    */
-                    /**
-                    thread {
-                        noteDao.updateNote(noteList[i])
-                        noteDao.updateNote(noteList[i - 1])
-                    }*/
                     Collections.swap(noteList, i, i - 1)
                 }
             }
