@@ -100,7 +100,7 @@ class NoteActivity : AppCompatActivity(){
                 Toast.makeText(this, "设置成功", Toast.LENGTH_SHORT).show()
             }
         }
-        
+
         }
 
    //监听并防止用户按back键直接返回到桌面，之前那个方法不行

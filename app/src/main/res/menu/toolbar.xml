@@ -12,8 +12,8 @@
         android:title="Delete"
         app:showAsAction="ifRoom"/>
     <item
-        android:id="@+id/settings"
+        android:id="@+id/sorting"
         android:icon="@drawable/ic_settings"
-        android:title="Settings"
+        android:title="Sort"
         app:showAsAction="never"/>
 </menu>

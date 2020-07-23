@@ -41,6 +41,7 @@ class NoteAdapter(val context: Context, val noteList: ArrayList<Note>):
         return holder
     }
 
+
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val note = noteList[position]
         holder.noteTitle.text = note.title

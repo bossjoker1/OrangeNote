@@ -1,17 +1,22 @@
 package com.example.orangesnote
 
 import android.content.Intent
+import android.icu.text.Collator
 import android.media.MediaPlayer
+import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
-import android.widget.Toast
+import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.ItemTouchHelper
 import com.example.orangesnote.data.AppDatabase
 import kotlinx.android.synthetic.main.activity_main.*
+import java.util.*
+import java.util.Locale.CHINA
+import kotlin.collections.ArrayList
 import kotlin.concurrent.thread
 
 
@@ -22,7 +27,8 @@ class MainActivity : AppCompatActivity() {
         var instance: MainActivity? = null
     }
 
-    val noteList = ArrayList<Note>()
+    var noteList = ArrayList<Note>()
+    val adpter = NoteAdapter(this, noteList)
 
     private val mediaPlayer = MediaPlayer()
 
@@ -45,7 +51,7 @@ class MainActivity : AppCompatActivity() {
         }
         val layoutManager = GridLayoutManager(this, 1)
         recyclerView.layoutManager = layoutManager
-        val adpter = NoteAdapter(this, noteList)
+        //val adpter = NoteAdapter(this, noteList)
         recyclerView.adapter = adpter
         //实现滑动与拖拽
         val callback: ItemTouchHelper.Callback = RecycleItemTouchHelper(adpter)
@@ -65,6 +71,7 @@ class MainActivity : AppCompatActivity() {
         return true
     }
     //还没写功能,可添加音乐啥的，应该跟天气预报的引入差不多
+    @RequiresApi(Build.VERSION_CODES.N)
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when(item.itemId){
             R.id.backup -> if (!mediaPlayer.isPlaying){
@@ -74,6 +81,32 @@ class MainActivity : AppCompatActivity() {
                 mediaPlayer.pause()
                 mediaPlayer.reset()
                 initMediaPlayer()
+            }
+            R.id.sorting -> {
+
+                val tplist = noteList
+                for (i in tplist){
+                    Log.d("test", i.title)
+                }
+               for (i in 0 until tplist.size) {
+                   var min = tplist[i]
+                   var k = i
+                   for (j in i until  tplist.size){
+                       if(tplist[j].title.length<=min.title.length){
+                           min = tplist[j]
+                           k = j
+                       }
+                   }
+                   tplist[k] = tplist[i]
+                   tplist[i] = min
+               }
+
+                Log.d("num",tplist.size.toString())
+                for (i in 0 until tplist.size){
+                    Log.d("test1", tplist[i].title)
+                }
+                noteList = tplist
+                adpter.notifyDataSetChanged()
             }
         }
         return true
