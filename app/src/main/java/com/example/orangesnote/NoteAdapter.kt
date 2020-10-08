@@ -90,7 +90,6 @@ class NoteAdapter(val context: Context, val noteList: ArrayList<Note>):
                 noteDao.updateNote(templist[i])
             }
         }
-
         notifyItemMoved(fromPosition, toPosition)
 
     }

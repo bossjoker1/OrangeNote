@@ -12,12 +12,12 @@ import android.util.Log
 import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
+import androidx.work.OneTimeWorkRequest
+import androidx.work.WorkManager
 import com.example.orangesnote.data.AppDatabase
 import kotlinx.android.synthetic.main.activity_note.*
 import java.util.*
 import kotlin.concurrent.thread
-import kotlin.math.abs
-import com.example.orangesnote.MainActivity
 
 
 class NoteActivity : AppCompatActivity(){
@@ -62,13 +62,17 @@ class NoteActivity : AppCompatActivity(){
                 val intent = Intent(this, MainActivity::class.java)
                 startActivity(intent)
                 finish()
+                val request = OneTimeWorkRequest.Builder(MyWorker::class.java).build()
+                WorkManager.getInstance(this).enqueue(request)
             }
+
         }
         //接收广播
-        val manager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+
+       /* val manager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
         val channel = NotificationChannel("time", "Time", NotificationManager.IMPORTANCE_DEFAULT)
         manager.createNotificationChannel(channel)
-
+*/
         setBtn.setOnClickListener { view ->
             val c = Calendar.getInstance()
             //调整为中国时区，不然有8小时差比较麻烦
@@ -100,7 +104,6 @@ class NoteActivity : AppCompatActivity(){
                 Toast.makeText(this, "设置成功", Toast.LENGTH_SHORT).show()
             }
         }
-
         }
 
    //监听并防止用户按back键直接返回到桌面，之前那个方法不行

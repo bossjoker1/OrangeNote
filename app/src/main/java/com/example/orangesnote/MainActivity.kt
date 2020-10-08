@@ -1,22 +1,21 @@
 package com.example.orangesnote
 
+
 import android.content.Intent
-import android.icu.text.Collator
 import android.media.MediaPlayer
 import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
+import android.view.Window
+import android.view.WindowManager
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.ItemTouchHelper
 import com.example.orangesnote.data.AppDatabase
 import kotlinx.android.synthetic.main.activity_main.*
-import java.util.*
-import java.util.Locale.CHINA
-import kotlin.collections.ArrayList
 import kotlin.concurrent.thread
 
 
@@ -64,6 +63,15 @@ class MainActivity : AppCompatActivity() {
             startActivity(intent)
             finish()
         }
+
+        val win: Window = window
+        win.addFlags(
+            WindowManager.LayoutParams.FLAG_SHOW_WHEN_LOCKED
+                    or WindowManager.LayoutParams.FLAG_DISMISS_KEYGUARD
+                    or WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON
+                    or WindowManager.LayoutParams.FLAG_TURN_SCREEN_ON
+        )
+
     }
     //添加toolbar
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
@@ -146,5 +154,4 @@ class MainActivity : AppCompatActivity() {
         mediaPlayer.setDataSource(fd.fileDescriptor, fd.startOffset, fd.length)
         mediaPlayer.prepare()
     }
-
 }
